@@ -1,27 +1,16 @@
 import React, { useState } from "react";
+import Form from "./Form";
 import Table from "./Table";
 
 
 function MyApp() {
 
-    const [characters, setCharacters] = useState([
-        {
-                name: "Charlie",
-                job: "Janitor"
-            },
-            {
-                name: "Mac",
-                job: "Bouncer"
-            },
-            {
-                name: "Dee",
-                job: "Aspring actress"
-            },
-            {
-                name: "Dennis",
-                job: "Bartender"
-            }
-        ]);
+    function updateList(person) {
+  setCharacters([...characters, person]);
+}
+
+
+    const [characters, setCharacters] = useState([]);
 
     function removeOneCharacter(index) 
     {
@@ -33,13 +22,15 @@ function MyApp() {
     } 
 
     return (
-        <div className="container">
-        <Table
-            characterData={characters}
-            removeCharacter={removeOneCharacter}
-        />
-        </div>
-    );
+  <div className="container">
+    <Table
+      characterData={characters}
+      removeCharacter={removeOneCharacter}
+    />
+    <Form handleSubmit={updateList} />
+  </div>
+);
+
 
 
 }
