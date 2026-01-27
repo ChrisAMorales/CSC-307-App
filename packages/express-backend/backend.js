@@ -49,12 +49,21 @@ const deleteUserById = (id) => {
     return true;
 };
 
+function generateId() {
+  return Math.random().toString(36).substring(2, 10);
+}
 
 
 const addUser = (user) => {
-  users.users_list.push(user);
-  return user;
+  const newUser = {
+    ...user,
+    id: generateId(),
+  };
+
+  users.users_list.push(newUser);
+  return newUser;
 };
+
 
 const findUserByName = (name) => {
   return users.users_list.filter(
@@ -90,16 +99,17 @@ app.get("/users", (req, res) => {
 });
 
 app.delete("/users/:id", (req, res) => {
-    const { id } = req.params;
-    const wasDeleted = deleteUserById(id);
+  const { id } = req.params;
+  const wasDeleted = deleteUserById(id);
 
-    if (wasDeleted === false) {
-        res.status(404).send("Resource not found.");
-        return;
-    }
+  if (wasDeleted === false) {
+    res.status(404).send("Resource not found.");
+    return;
+  }
 
-    res.send();
+  res.status(204).send();
 });
+
 
 const findUserById = (id) =>
     users["users_list"].find((user) => user["id"] === id);
@@ -116,9 +126,11 @@ app.get("/users/:id", (req, res) => {
 
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
-  addUser(userToAdd);
-  res.send();
+  const newUser = addUser(userToAdd);
+  res.status(201).send(newUser);
 });
+
+
 
 
 app.listen(port, () => {
